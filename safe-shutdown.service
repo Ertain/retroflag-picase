@@ -1,0 +1,10 @@
+[Unit]
+Description=Safe shutdown for the RetroFlag PiCase that uses Retropie.
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/RetroFlag/SafeShutdown.py &
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
