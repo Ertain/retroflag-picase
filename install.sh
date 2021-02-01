@@ -37,14 +37,17 @@ script=/opt/RetroFlag/SafeShutdown.py
 wget -O $script "$SourcePath/SafeShutdown.py"
 
 #Enable Python script to run on start up------------
-RC=/etc/rc.local
+SD=/etc/systemd/system
+shutdown_service="safe-shutdown.service"
 
-if grep -q "sudo python $script &" "$RC";
+if [ -f "$SD/$shutdown_service" ];
 	then
-		echo "File $RC already configured. Doing nothing."
+		echo "File $shutdown_service already there. Doing nothing."
 	else
-		sed -i -e "s/^exit 0/sudo python \/opt\/RetroFlag\/SafeShutdown.py \&\n&/g" "$RC"
-		echo "File /etc/rc.local configured."
+		wget -O "$shutdown_service" "$SourcePath/$shutdown_service"
+		sudo cp "$shutdown_service" "$SD"
+		sudo systemctl enable "$shutdown_service"
+		echo "File $shutdown_service configured."
 fi
 #-----------------------------------------------------------
 
